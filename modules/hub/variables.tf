@@ -1,11 +1,11 @@
-variable "rg_name_001" {
+variable "rg_name" {
   type      = string
-  default   = "rg-dev-001"
+  default   = "rg-hub"
   sensitive = false
 
 }
 
-variable "rg_location_001" {
+variable "rg_location" {
   type      = string
   default   = "Poland Central"
   sensitive = false
