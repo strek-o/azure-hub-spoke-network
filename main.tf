@@ -1,18 +1,7 @@
-terraform {
-  required_providers {
-    azurerm = {
-      source  = "hashicorp/azurerm"
-      version = "~>4.18.0"
-    }
-  }
+module "environments-dev" {
+  source = "./environments/dev"
 }
 
-provider "azurerm" {
-  features {}
-  subscription_id = var.subscription_id
-}
-
-resource "azurerm_resource_group" "rg" {
-  name     = "rg"
-  location = "Poland Central"
+module "environments-prod" {
+  source = "./environments/prod"
 }
