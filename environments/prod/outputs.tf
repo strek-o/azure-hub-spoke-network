@@ -1,19 +1,19 @@
-output "rg_name_001" {
+output "rg_001_name" {
   value = azurerm_resource_group.rg-prod-001.name
 
 }
 
-output "rg_location_001" {
+output "rg_001_location" {
   value = azurerm_resource_group.rg-prod-001.location
 
 }
 
-output "rg_name_002" {
+output "rg_002_name" {
   value = azurerm_resource_group.rg-prod-002.name
 
 }
 
-output "rg_location_002" {
+output "rg_002_location" {
   value = azurerm_resource_group.rg-prod-002.location
 
 }

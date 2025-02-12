@@ -1,4 +1,4 @@
-module "modules-spoke" {
+module "spoke" {
   source = "./modules/spoke"
 
 }

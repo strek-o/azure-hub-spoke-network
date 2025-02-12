@@ -11,8 +11,8 @@ module "vpc" {
 data "azurerm_subscription" "current" {
 }
 
-resource "azurerm_network_manager" "nm" {
-  name                = var.nm_name
+resource "azurerm_network_manager" "NetworkManager" {
+  name                = "NetworkManager"
   location            = module.hub.rg_location
   resource_group_name = module.hub.rg_name
   scope {
@@ -23,47 +23,47 @@ resource "azurerm_network_manager" "nm" {
 }
 
 resource "azurerm_network_manager_network_group" "ng-hub" {
-  name               = var.ng_name_hub
-  network_manager_id = azurerm_network_manager.nm.id
+  name               = var.ng_hub_name
+  network_manager_id = azurerm_network_manager.NetworkManager.id
 
 }
 
 resource "azurerm_network_manager_static_member" "member-hub" {
-  name                      = module.vpc.vnet_name_hub
+  name                      = module.vpc.vnet_hub_name
   network_group_id          = azurerm_network_manager_network_group.ng-hub.id
-  target_virtual_network_id = module.vpc.vnet_id_hub
+  target_virtual_network_id = module.vpc.vnet_hub_id
 
 }
 
 resource "azurerm_network_manager_network_group" "ng-dev" {
-  name               = var.ng_name_dev
-  network_manager_id = azurerm_network_manager.nm.id
+  name               = var.ng_dev_name
+  network_manager_id = azurerm_network_manager.NetworkManager.id
 
 }
 
 resource "azurerm_network_manager_static_member" "member-dev-001" {
-  name                      = module.vpc.vnet_name_dev_001
+  name                      = module.vpc.vnet_dev_001_name
   network_group_id          = azurerm_network_manager_network_group.ng-dev.id
-  target_virtual_network_id = module.vpc.vnet_id_dev_001
+  target_virtual_network_id = module.vpc.vnet_dev_001_id
 
 }
 
 resource "azurerm_network_manager_network_group" "ng-prod" {
-  name               = var.ng_name_prod
-  network_manager_id = azurerm_network_manager.nm.id
+  name               = var.ng_prod_name
+  network_manager_id = azurerm_network_manager.NetworkManager.id
 
 }
 
 resource "azurerm_network_manager_static_member" "member-prod-001" {
-  name                      = module.vpc.vnet_name_prod_001
+  name                      = module.vpc.vnet_prod_001_name
   network_group_id          = azurerm_network_manager_network_group.ng-prod.id
-  target_virtual_network_id = module.vpc.vnet_id_prod_001
+  target_virtual_network_id = module.vpc.vnet_prod_001_id
 
 }
 
 resource "azurerm_network_manager_static_member" "member-prod-002" {
-  name                      = module.vpc.vnet_name_prod_002
+  name                      = module.vpc.vnet_prod_002_name
   network_group_id          = azurerm_network_manager_network_group.ng-prod.id
-  target_virtual_network_id = module.vpc.vnet_id_prod_002
+  target_virtual_network_id = module.vpc.vnet_prod_002_id
 
 }

@@ -1,62 +1,62 @@
-variable "vnet_name_hub" {
+variable "vnet_hub_name" {
   type      = string
   default   = "vnet-hub"
   sensitive = false
 
 }
 
-variable "subnet_name_hub" {
+variable "snet_hub_1_name" {
   type      = string
-  default   = "subnet-hub"
+  default   = "ServicesSubnet"
   sensitive = false
 
 }
 
-variable "vnet_name_dev_001" {
+variable "vnet_dev_001_name" {
   type      = string
   default   = "vnet-dev-001"
   sensitive = false
 
 }
 
-variable "subnet_name_dev_001_001" {
+variable "snet_dev_001_1_name" {
   type      = string
-  default   = "subnet-dev-001-001"
+  default   = "Dev_001_Subnet_1"
   sensitive = false
 
 }
 
-variable "vnet_name_prod_001" {
+variable "vnet_prod_001_name" {
   type      = string
   default   = "vnet-prod-001"
   sensitive = false
 
 }
 
-variable "subnet_name_prod_001_001" {
+variable "snet_prod_001_1_name" {
   type      = string
-  default   = "subnet-prod-001-001"
+  default   = "Prod_001_Subnet_1"
   sensitive = false
 
 }
 
-variable "vnet_name_prod_002" {
+variable "vnet_prod_002_name" {
   type      = string
   default   = "vnet-prod-002"
   sensitive = false
 
 }
 
-variable "subnet_name_prod_002_001" {
+variable "snet_prod_002_1_name" {
   type      = string
-  default   = "subnet-prod-002-001"
+  default   = "Prod_002_Subnet_1"
   sensitive = false
 
 }
 
-variable "subnet_name_prod_002_002" {
+variable "snet_prod_002_2_name" {
   type      = string
-  default   = "subnet-prod-002-002"
+  default   = "Prod_002_Subnet_2"
   sensitive = false
 
 }
