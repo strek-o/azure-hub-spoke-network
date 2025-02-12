@@ -1,4 +1,4 @@
-module "modules-vpc" {
-  source = "./modules/vpc"
+module "modules-spoke" {
+  source = "./modules/spoke"
 
 }
