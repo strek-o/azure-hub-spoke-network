@@ -89,3 +89,12 @@ resource "azurerm_subnet" "subnet-prod-002-002" {
   address_prefixes     = ["10.3.1.0/24"]
 
 }
+
+resource "null_resource" "nw-delete" {
+  provisioner "local-exec" {
+    command = "az group delete --name NetworkWatcherRG --yes --no-wait"
+  }
+  depends_on = [azurerm_virtual_network.vnet-hub, azurerm_virtual_network.vnet-dev-001,
+  azurerm_virtual_network.vnet-prod-001, azurerm_virtual_network.vnet-prod-002]
+
+}
