@@ -3,3 +3,13 @@ variable "sub_id" {
   type        = string
   sensitive   = true
 }
+
+variable "vm_Main_001_admin_username" {
+  type      = string
+  sensitive = true
+}
+
+variable "vm_Main_001_admin_password" {
+  type      = string
+  sensitive = true
+}

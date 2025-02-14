@@ -72,8 +72,8 @@ module "ar-DenyInboundAll" {
   ar_protocol                   = "Any"
   ar_source_port_ranges         = "0-65535"
   ar_destination_port_ranges    = "0-65535"
-  ar_source_address_prefix      = "0.0.0.0/0"
-  ar_destination_address_prefix = "0.0.0.0/0"
+  ar_source_address_prefix      = "*"
+  ar_destination_address_prefix = "*"
 }
 
 module "dp-hub" {
@@ -81,6 +81,11 @@ module "dp-hub" {
   nm_id       = module.NetworkManager.nm_id
   dp_location = module.rg-hub.rg_location
   sac_id      = module.SecurityAdminConfiguration.sac_id
+  depends_on = [
+    module.SecurityAdminConfiguration,
+    module.arc-hub,
+    module.ar-DenyInboundAll
+  ]
 }
 
 module "rg-dev-001" {
@@ -135,8 +140,8 @@ module "ar-AllowInboundRDP" {
   ar_protocol                   = "Tcp"
   ar_source_port_ranges         = "0-65535"
   ar_destination_port_ranges    = "3389"
-  ar_source_address_prefix      = "0.0.0.0/0"
-  ar_destination_address_prefix = "0.0.0.0/0"
+  ar_source_address_prefix      = "*"
+  ar_destination_address_prefix = "*"
 }
 
 module "dp-dev-001" {
@@ -144,6 +149,39 @@ module "dp-dev-001" {
   nm_id       = module.NetworkManager.nm_id
   dp_location = module.rg-dev-001.rg_location
   sac_id      = module.SecurityAdminConfiguration.sac_id
+  depends_on = [
+    module.SecurityAdminConfiguration,
+    module.arc-dev,
+    module.ar-AllowInboundRDP
+  ]
+}
+
+module "pip-Main-001" {
+  source       = "./modules/public_ip"
+  pip_name     = "pip-Main-001"
+  rg_name      = module.rg-dev-001.rg_name
+  pip_location = module.rg-dev-001.rg_location
+}
+
+module "nic-Main-001" {
+  source                    = "./modules/network_interface"
+  nic_name                  = "nic-Main-001"
+  nic_location              = module.rg-dev-001.rg_location
+  rg_name                   = module.rg-dev-001.rg_name
+  nic_ip_configuration_name = "nic-ip-config-dev-001"
+  snet_id                   = module.DevSubnet.snet_id
+  pip_id                    = module.pip-Main-001.pip_id
+}
+
+module "vm-Main-001" {
+  source             = "./modules/windows_virtual_machine"
+  wvm_name           = "vm-Main-001"
+  rg_name            = module.rg-dev-001.rg_name
+  wvm_location       = module.rg-dev-001.rg_location
+  wvm_size           = "Standard_B2s"
+  wvm_admin_username = var.vm_Main_001_admin_username
+  wvm_admin_password = var.vm_Main_001_admin_password
+  nic_id             = module.nic-Main-001.nic_id
 }
 
 module "rg-prod-001" {
@@ -224,7 +262,7 @@ module "smem-prod" {
   smem_target_virtual_network_id = module.vnet-prod-002.vnet_id
 }
 
-resource "null_resource" "nw-delete" {
+resource "null_resource" "DeleteNetworkWatcher" {
   provisioner "local-exec" {
     command = "az group delete --name NetworkWatcherRG --yes --no-wait"
   }
@@ -234,4 +272,36 @@ resource "null_resource" "nw-delete" {
     module.vnet-prod-001,
     module.vnet-prod-002
   ]
+}
+
+resource "azurerm_policy_definition" "DenyNetworkWatcher" {
+  name         = "DenyNetworkWatcher"
+  policy_type  = "Custom"
+  mode         = "All"
+  display_name = "Deny Network Watcher"
+
+  policy_rule = <<POLICY_RULE
+  {
+    "if": {
+      "allOf": [
+        {
+          "field": "type",
+          "equals": "Microsoft.Network/networkWatchers"
+        }
+      ]
+    },
+    "then": {
+      "effect": "deny"
+    }
+  }
+  POLICY_RULE
+}
+
+data "azurerm_subscription" "current" {
+}
+
+resource "azurerm_subscription_policy_assignment" "pa-DenyNetworkWatcher" {
+  name                 = "pa-DenyNetworkWatcher"
+  policy_definition_id = azurerm_policy_definition.DenyNetworkWatcher.id
+  subscription_id      = data.azurerm_subscription.current.id
 }
