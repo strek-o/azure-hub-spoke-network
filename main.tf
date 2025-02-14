@@ -49,6 +49,40 @@ module "smem-hub" {
   smem_target_virtual_network_id = module.vnet-hub.vnet_id
 }
 
+module "SecurityAdminConfiguration" {
+  source   = "./modules/network_manager/security_admin_configuration"
+  sac_name = "SecurityAdminConfiguration"
+  nm_id    = module.NetworkManager.nm_id
+}
+
+module "arc-hub" {
+  source   = "./modules/network_manager/admin_rule_collection"
+  arc_name = "arc-hub"
+  sac_id   = module.SecurityAdminConfiguration.sac_id
+  netg_id  = module.netg-hub.netg_id
+}
+
+module "ar-DenyInboundAll" {
+  source                        = "./modules/network_manager/admin_rule"
+  ar_name                       = "DenyInboundAll"
+  arc_id                        = module.arc-hub.arc_id
+  ar_action                     = "Deny"
+  ar_direction                  = "Inbound"
+  ar_priority                   = 1
+  ar_protocol                   = "Any"
+  ar_source_port_ranges         = "0-65535"
+  ar_destination_port_ranges    = "0-65535"
+  ar_source_address_prefix      = "0.0.0.0/0"
+  ar_destination_address_prefix = "0.0.0.0/0"
+}
+
+module "dp-hub" {
+  source      = "./modules/network_manager/deployment"
+  nm_id       = module.NetworkManager.nm_id
+  dp_location = module.rg-hub.rg_location
+  sac_id      = module.SecurityAdminConfiguration.sac_id
+}
+
 module "rg-dev-001" {
   source      = "./modules/resource_group"
   rg_name     = "rg-dev-001"
@@ -82,6 +116,34 @@ module "smem-dev" {
   smem_name                      = module.vnet-dev-001.vnet_name
   netg_id                        = module.netg-dev.netg_id
   smem_target_virtual_network_id = module.vnet-dev-001.vnet_id
+}
+
+module "arc-dev" {
+  source   = "./modules/network_manager/admin_rule_collection"
+  arc_name = "arc-dev"
+  sac_id   = module.SecurityAdminConfiguration.sac_id
+  netg_id  = module.netg-dev.netg_id
+}
+
+module "ar-AllowInboundRDP" {
+  source                        = "./modules/network_manager/admin_rule"
+  ar_name                       = "AllowInboundRDP"
+  arc_id                        = module.arc-dev.arc_id
+  ar_action                     = "Allow"
+  ar_direction                  = "Inbound"
+  ar_priority                   = 100
+  ar_protocol                   = "Tcp"
+  ar_source_port_ranges         = "0-65535"
+  ar_destination_port_ranges    = "3389"
+  ar_source_address_prefix      = "0.0.0.0/0"
+  ar_destination_address_prefix = "0.0.0.0/0"
+}
+
+module "dp-dev-001" {
+  source      = "./modules/network_manager/deployment"
+  nm_id       = module.NetworkManager.nm_id
+  dp_location = module.rg-dev-001.rg_location
+  sac_id      = module.SecurityAdminConfiguration.sac_id
 }
 
 module "rg-prod-001" {
