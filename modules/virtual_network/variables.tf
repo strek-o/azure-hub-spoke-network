@@ -10,5 +10,5 @@ variable "rg_name" {
   type = string
 }
 
-variable "address_space" {
+variable "vnet_address_space" {
 }

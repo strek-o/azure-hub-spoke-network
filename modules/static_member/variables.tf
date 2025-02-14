@@ -6,6 +6,6 @@ variable "netg_id" {
   type = string
 }
 
-variable "target_virtual_network_id" {
+variable "smem_target_virtual_network_id" {
   type = string
 }

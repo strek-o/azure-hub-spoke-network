@@ -10,5 +10,5 @@ variable "vnet_name" {
   type = string
 }
 
-variable "address_prefixes" {
+variable "snet_address_prefixes" {
 }
