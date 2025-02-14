@@ -37,13 +37,13 @@ module "NetworkManager" {
 }
 
 module "netg-hub" {
-  source    = "./modules/network_group"
+  source    = "./modules/network_manager/network_group"
   netg_name = "netg-hub"
   nm_id     = module.NetworkManager.nm_id
 }
 
 module "smem-hub" {
-  source                         = "./modules/static_member"
+  source                         = "./modules/network_manager/static_member"
   smem_name                      = module.vnet-hub.vnet_name
   netg_id                        = module.netg-hub.netg_id
   smem_target_virtual_network_id = module.vnet-hub.vnet_id
@@ -72,13 +72,13 @@ module "DevSubnet" {
 }
 
 module "netg-dev" {
-  source    = "./modules/network_group"
+  source    = "./modules/network_manager/network_group"
   netg_name = "netg-dev"
   nm_id     = module.NetworkManager.nm_id
 }
 
 module "smem-dev" {
-  source                         = "./modules/static_member"
+  source                         = "./modules/network_manager/static_member"
   smem_name                      = module.vnet-dev-001.vnet_name
   netg_id                        = module.netg-dev.netg_id
   smem_target_virtual_network_id = module.vnet-dev-001.vnet_id
@@ -107,13 +107,13 @@ module "ProdSubnet" {
 }
 
 module "netg-prod-001" {
-  source    = "./modules/network_group"
+  source    = "./modules/network_manager/network_group"
   netg_name = "netg-prod-001"
   nm_id     = module.NetworkManager.nm_id
 }
 
 module "smem-prod-001" {
-  source                         = "./modules/static_member"
+  source                         = "./modules/network_manager/static_member"
   smem_name                      = module.vnet-prod-001.vnet_name
   netg_id                        = module.netg-prod-001.netg_id
   smem_target_virtual_network_id = module.vnet-prod-001.vnet_id
@@ -150,13 +150,13 @@ module "SalesSubnet" {
 }
 
 module "netg-prod" {
-  source    = "./modules/network_group"
+  source    = "./modules/network_manager/network_group"
   netg_name = "netg-prod"
   nm_id     = module.NetworkManager.nm_id
 }
 
 module "smem-prod" {
-  source                         = "./modules/static_member"
+  source                         = "./modules/network_manager/static_member"
   smem_name                      = module.vnet-prod-002.vnet_name
   netg_id                        = module.netg-prod.netg_id
   smem_target_virtual_network_id = module.vnet-prod-002.vnet_id
