@@ -11,4 +11,5 @@ variable "rg_name" {
 }
 
 variable "vnet_address_space" {
+  type = list(string)
 }

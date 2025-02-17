@@ -6,6 +6,6 @@ variable "sac_id" {
   type = string
 }
 
-variable "netg_id" {
-  type = string
+variable "netg_ids" {
+  type = list(string)
 }
