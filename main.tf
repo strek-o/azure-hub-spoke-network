@@ -60,9 +60,9 @@ module "vnet-prod-002" {
 
 #* Subnets
 
-module "GatewaySubnet" {
+module "AzureFirewallSubnet" {
   source                = "./modules/subnet"
-  snet_name             = "GatewaySubnet"
+  snet_name             = "AzureFirewallSubnet"
   rg_name               = module.vnet-hub.rg_name
   vnet_name             = module.vnet-hub.vnet_name
   snet_address_prefixes = ["10.0.0.0/24"]
@@ -203,6 +203,13 @@ module "pip-Hosting" {
   pip_name     = "pip-Hosting"
   rg_name      = module.rg-prod-002.rg_name
   pip_location = module.rg-prod-002.rg_location
+}
+
+module "pip-Firewall" {
+  source       = "./modules/public_ip"
+  pip_name     = "pip-Firewall"
+  rg_name      = module.rg-hub.rg_name
+  pip_location = module.rg-hub.rg_location
 }
 
 #* Network Interfaces
@@ -398,6 +405,29 @@ module "dp-prod-002" {
   dp_location = module.rg-prod-002.rg_location
   sac_id      = module.SecurityAdminConfiguration.sac_id
   depends_on  = [module.dp-prod-001]
+}
+
+#* Firewall
+
+module "Firewall" {
+  source      = "./modules/firewall"
+  fw_name     = "Firewall"
+  fw_location = module.rg-hub.rg_location
+  rg_name     = module.rg-hub.rg_name
+  snet_id     = module.AzureFirewallSubnet.snet_id
+  pip_id      = module.pip-Firewall.pip_id
+}
+
+#* Application Rule Collection
+
+module "ApplicationRuleCollection" {
+  source     = "./modules/firewall/application_rule_collection"
+  arc_name   = "arc-ApplicationRuleCollection"
+  fw_name    = module.Firewall.fw_name
+  rg_name    = module.Firewall.rg_name
+  priority   = 100
+  action     = "Allow"
+  depends_on = [module.Firewall]
 }
 
 #* Policy Definition
