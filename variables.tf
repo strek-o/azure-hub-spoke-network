@@ -14,42 +14,32 @@ variable "vm_Testing_admin_password" {
   sensitive = true
 }
 
-variable "vm_HPC_admin_username" {
+variable "vm_RDPConnection_admin_username" {
   type      = string
   sensitive = true
 }
 
-variable "vm_HPC_admin_password" {
+variable "vm_RDPConnection_admin_password" {
   type      = string
   sensitive = true
 }
 
-variable "vm_Main_admin_username" {
+variable "vm_Database_admin_username" {
   type      = string
   sensitive = true
 }
 
-variable "vm_Main_admin_password" {
+variable "vm_Database_admin_password" {
   type      = string
   sensitive = true
 }
 
-variable "vm_Backup_admin_username" {
+variable "vm_App_admin_username" {
   type      = string
   sensitive = true
 }
 
-variable "vm_Backup_admin_password" {
-  type      = string
-  sensitive = true
-}
-
-variable "vm_Hosting_admin_username" {
-  type      = string
-  sensitive = true
-}
-
-variable "vm_Hosting_admin_password" {
+variable "vm_App_admin_password" {
   type      = string
   sensitive = true
 }

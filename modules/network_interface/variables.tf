@@ -19,5 +19,6 @@ variable "snet_id" {
 }
 
 variable "pip_id" {
-  type = string
+  type    = string
+  default = null
 }
