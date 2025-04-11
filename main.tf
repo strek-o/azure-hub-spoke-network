@@ -30,6 +30,12 @@ module "VirtualMachinesRG" {
   rg_location = "Poland Central"
 }
 
+module "RouteTablesRG" {
+  source      = "./modules/resource_group"
+  rg_name     = "RouteTablesRG"
+  rg_location = "Poland Central"
+}
+
 #* Virtual Networks
 
 module "HubVNET" {
@@ -178,6 +184,36 @@ module "ProductionVNETtoHubVNETPeering" {
   resource_group_name       = module.VirtualNetworksRG.rg_name
   virtual_network_name      = module.ProductionVNET.vnet_name
   remote_virtual_network_id = module.HubVNET.vnet_id
+}
+
+#* Route Table
+
+module "DevelopmentRT" {
+  source              = "./modules/route_table"
+  name                = "DevelopmentRT"
+  location            = module.RouteTablesRG.rg_location
+  resource_group_name = module.RouteTablesRG.rg_name
+}
+
+#* Route
+
+module "AzureFirewallRoute" {
+  source                 = "./modules/route"
+  name                   = "AzureFirewallRoute"
+  resource_group_name    = module.RouteTablesRG.rg_name
+  route_table_name       = module.DevelopmentRT.name
+  address_prefix         = "0.0.0.0/0"
+  next_hop_type          = "VirtualAppliance"
+  next_hop_in_ip_address = module.AzureFirewall.private_ip_address
+  depends_on             = [module.AzureFirewall]
+}
+
+#* Route Table Association
+
+module "DevelopmentRTAssociation" {
+  source         = "./modules/route_table/association"
+  subnet_id      = module.GeneralSubnet.snet_id
+  route_table_id = module.DevelopmentRT.id
 }
 
 #* Network Manager
@@ -435,8 +471,8 @@ module "NetworkManagerDP" {
 module "AzureFirewall" {
   source      = "./modules/firewall"
   fw_name     = "AzureFirewall"
-  fw_location = module.HubRG.rg_location
-  rg_name     = module.HubRG.rg_name
+  fw_location = module.VirtualNetworksRG.rg_location
+  rg_name     = module.VirtualNetworksRG.rg_name
   snet_id     = module.AzureFirewallSubnet.snet_id
   pip_id      = module.AzureFirewallPIP.pip_id
 }
