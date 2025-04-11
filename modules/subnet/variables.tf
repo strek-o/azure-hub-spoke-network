@@ -1,14 +1,15 @@
-variable "snet_name" {
+variable "name" {
   type = string
 }
 
-variable "rg_name" {
+variable "resource_group_name" {
   type = string
 }
 
-variable "vnet_name" {
+variable "virtual_network_name" {
   type = string
 }
 
-variable "snet_address_prefixes" {
+variable "address_prefixes" {
+  type = list(string)
 }

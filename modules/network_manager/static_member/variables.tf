@@ -1,11 +1,11 @@
-variable "smem_name" {
+variable "name" {
   type = string
 }
 
-variable "netg_id" {
+variable "network_group_id" {
   type = string
 }
 
-variable "smem_target_virtual_network_id" {
+variable "target_virtual_network_id" {
   type = string
 }

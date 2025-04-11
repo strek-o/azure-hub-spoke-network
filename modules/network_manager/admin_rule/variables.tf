@@ -1,39 +1,39 @@
-variable "ar_name" {
+variable "name" {
   type = string
 }
 
-variable "arc_id" {
+variable "admin_rule_collection_id" {
   type = string
 }
 
-variable "ar_action" {
+variable "action" {
   type = string
 }
 
-variable "ar_direction" {
+variable "direction" {
   type = string
 }
 
-variable "ar_priority" {
+variable "priority" {
   type = number
 }
 
-variable "ar_protocol" {
+variable "protocol" {
   type = string
 }
 
-variable "ar_source_port_ranges" {
+variable "source_port_ranges" {
+  type = list(string)
+}
+
+variable "destination_port_ranges" {
+  type = list(string)
+}
+
+variable "source_address_prefix" {
   type = string
 }
 
-variable "ar_destination_port_ranges" {
-  type = string
-}
-
-variable "ar_source_address_prefix" {
-  type = string
-}
-
-variable "ar_destination_address_prefix" {
+variable "destination_address_prefix" {
   type = string
 }

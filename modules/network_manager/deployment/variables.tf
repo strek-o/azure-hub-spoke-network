@@ -1,11 +1,15 @@
-variable "nm_id" {
+variable "network_manager_id" {
   type = string
 }
 
-variable "dp_location" {
+variable "location" {
   type = string
 }
 
-variable "sac_id" {
+variable "scope_access" {
   type = string
+}
+
+variable "configuration_ids" {
+  type = list(string)
 }

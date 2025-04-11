@@ -358,8 +358,8 @@ module "TestingVM" {
   rg_name            = module.VirtualMachinesRG.rg_name
   wvm_location       = module.VirtualMachinesRG.rg_location
   wvm_size           = "Standard_B2s"
-  wvm_admin_username = var.vm_Testing_admin_username
-  wvm_admin_password = var.vm_Testing_admin_password
+  wvm_admin_username = var.admin_username
+  wvm_admin_password = var.admin_password
   nic_id             = module.TestingNIC.nic_id
 }
 
@@ -369,8 +369,8 @@ module "RDPConnectionVM" {
   rg_name            = module.VirtualMachinesRG.rg_name
   wvm_location       = module.VirtualMachinesRG.rg_location
   wvm_size           = "Standard_B2s"
-  wvm_admin_username = var.vm_RDPConnection_admin_username
-  wvm_admin_password = var.vm_RDPConnection_admin_password
+  wvm_admin_username = var.admin_username
+  wvm_admin_password = var.admin_password
   nic_id             = module.RDPConnectionNIC.nic_id
 }
 
@@ -380,8 +380,8 @@ module "DatabaseVM" {
   rg_name            = module.VirtualMachinesRG.rg_name
   wvm_location       = module.VirtualMachinesRG.rg_location
   wvm_size           = "Standard_B2s"
-  wvm_admin_username = var.vm_Database_admin_username
-  wvm_admin_password = var.vm_Database_admin_password
+  wvm_admin_username = var.admin_username
+  wvm_admin_password = var.admin_password
   nic_id             = module.DatabaseNIC.nic_id
 }
 
@@ -391,8 +391,8 @@ module "AppVM" {
   rg_name            = module.VirtualMachinesRG.rg_name
   wvm_location       = module.VirtualMachinesRG.rg_location
   wvm_size           = "Standard_B2s"
-  wvm_admin_username = var.vm_App_admin_username
-  wvm_admin_password = var.vm_App_admin_password
+  wvm_admin_username = var.admin_username
+  wvm_admin_password = var.admin_password
   nic_id             = module.AppNIC.nic_id
 }
 

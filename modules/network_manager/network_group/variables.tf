@@ -1,7 +1,7 @@
-variable "netg_name" {
+variable "name" {
   type = string
 }
 
-variable "nm_id" {
+variable "network_manager_id" {
   type = string
 }

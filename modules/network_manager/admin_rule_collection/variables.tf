@@ -1,11 +1,11 @@
-variable "arc_name" {
+variable "name" {
   type = string
 }
 
-variable "sac_id" {
+variable "security_admin_configuration_id" {
   type = string
 }
 
-variable "netg_ids" {
+variable "network_group_ids" {
   type = list(string)
 }

@@ -1,11 +1,11 @@
-output "fw_name" {
-  value = azurerm_firewall.fw.name
+output "name" {
+  value = azurerm_firewall.firewall.name
 }
 
-output "rg_name" {
-  value = azurerm_firewall.fw.resource_group_name
+output "resource_group_name" {
+  value = azurerm_firewall.firewall.resource_group_name
 }
 
 output "private_ip_address" {
-  value = azurerm_firewall.fw.ip_configuration[0].private_ip_address
+  value = azurerm_firewall.firewall.ip_configuration[0].private_ip_address
 }

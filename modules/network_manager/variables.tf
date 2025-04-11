@@ -1,14 +1,20 @@
-variable "nm_name" {
+variable "name" {
   type = string
 }
 
-variable "nm_location" {
+variable "location" {
   type = string
 }
 
-variable "rg_name" {
+variable "resource_group_name" {
   type = string
 }
 
-variable "nm_scope_accesses" {
+variable "scope_accesses" {
+  type = list(string)
+}
+
+variable "subscription_ids" {
+  type      = list(string)
+  sensitive = true
 }

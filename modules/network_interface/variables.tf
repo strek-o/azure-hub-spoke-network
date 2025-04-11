@@ -1,24 +1,24 @@
-variable "nic_name" {
+variable "name" {
   type = string
 }
 
-variable "nic_location" {
+variable "location" {
   type = string
 }
 
-variable "rg_name" {
+variable "resource_group_name" {
   type = string
 }
 
-variable "nic_ip_configuration_name" {
+variable "ip_configuration_name" {
   type = string
 }
 
-variable "snet_id" {
+variable "subnet_id" {
   type = string
 }
 
-variable "pip_id" {
+variable "public_ip_address_id" {
   type    = string
   default = null
 }

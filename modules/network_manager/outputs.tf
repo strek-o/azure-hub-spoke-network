@@ -1,3 +1,3 @@
-output "nm_id" {
-  value = azurerm_network_manager.nm.id
+output "id" {
+  value = azurerm_network_manager.network_manager.id
 }

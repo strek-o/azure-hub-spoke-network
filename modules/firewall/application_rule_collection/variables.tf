@@ -1,12 +1,12 @@
-variable "arc_name" {
+variable "name" {
   type = string
 }
 
-variable "fw_name" {
+variable "azure_firewall_name" {
   type = string
 }
 
-variable "rg_name" {
+variable "resource_group_name" {
   type = string
 }
 
@@ -16,4 +16,16 @@ variable "priority" {
 
 variable "action" {
   type = string
+}
+
+variable "rule_name" {
+  type = string
+}
+
+variable "source_addresses" {
+  type = list(string)
+}
+
+variable "target_fqdns" {
+  type = list(string)
 }

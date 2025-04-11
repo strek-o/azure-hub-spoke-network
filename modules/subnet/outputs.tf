@@ -1,3 +1,3 @@
-output "snet_id" {
-  value = azurerm_subnet.snet.id
+output "id" {
+  value = azurerm_subnet.subnet.id
 }

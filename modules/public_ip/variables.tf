@@ -1,11 +1,11 @@
-variable "pip_name" {
+variable "name" {
   type = string
 }
 
-variable "rg_name" {
+variable "resource_group_name" {
   type = string
 }
 
-variable "pip_location" {
+variable "location" {
   type = string
 }

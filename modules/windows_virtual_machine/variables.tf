@@ -1,27 +1,28 @@
-variable "wvm_name" {
+variable "name" {
   type = string
 }
 
-variable "rg_name" {
+variable "resource_group_name" {
   type = string
 }
 
-variable "wvm_location" {
+variable "location" {
   type = string
 }
 
-variable "wvm_size" {
+variable "size" {
   type = string
 }
 
-variable "wvm_admin_username" {
+variable "admin_username" {
   type = string
 }
 
-variable "wvm_admin_password" {
-  type = string
+variable "admin_password" {
+  type      = string
+  sensitive = true
 }
 
-variable "nic_id" {
-  type = string
+variable "network_interface_ids" {
+  type = list(string)
 }

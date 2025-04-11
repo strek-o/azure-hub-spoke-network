@@ -6,5 +6,4 @@ resource "azurerm_virtual_network_peering" "peering" {
   allow_virtual_network_access = true
   allow_forwarded_traffic      = true
   allow_gateway_transit        = false
-
 }
