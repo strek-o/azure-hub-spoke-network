@@ -132,6 +132,54 @@ module "RDPConnectionVNETtoDevelopmentVNETPeering" {
   remote_virtual_network_id = module.DevelopmentVNET.vnet_id
 }
 
+module "HubVNETtoDevelopmentVNETPeering" {
+  source                    = "./modules/virtual_network/peering"
+  name                      = "HubVNETtoDevelopmentVNETPeering"
+  resource_group_name       = module.VirtualNetworksRG.rg_name
+  virtual_network_name      = module.HubVNET.vnet_name
+  remote_virtual_network_id = module.DevelopmentVNET.vnet_id
+}
+
+module "DevelopmentVNETtoHubVNETPeering" {
+  source                    = "./modules/virtual_network/peering"
+  name                      = "DevelopmentVNETtoHubVNETPeering"
+  resource_group_name       = module.VirtualNetworksRG.rg_name
+  virtual_network_name      = module.DevelopmentVNET.vnet_name
+  remote_virtual_network_id = module.HubVNET.vnet_id
+}
+
+module "HubVNETtoNonProductionVNETPeering" {
+  source                    = "./modules/virtual_network/peering"
+  name                      = "HubVNETtoNonProductionVNETPeering"
+  resource_group_name       = module.VirtualNetworksRG.rg_name
+  virtual_network_name      = module.HubVNET.vnet_name
+  remote_virtual_network_id = module.NonProductionVNET.vnet_id
+}
+
+module "NonProductionVNETtoHubVNETPeering" {
+  source                    = "./modules/virtual_network/peering"
+  name                      = "NonProductionVNETtoHubVNETPeering"
+  resource_group_name       = module.VirtualNetworksRG.rg_name
+  virtual_network_name      = module.NonProductionVNET.vnet_name
+  remote_virtual_network_id = module.HubVNET.vnet_id
+}
+
+module "HubVNETtoProductionVNETPeering" {
+  source                    = "./modules/virtual_network/peering"
+  name                      = "HubVNETtoProductionVNETPeering"
+  resource_group_name       = module.VirtualNetworksRG.rg_name
+  virtual_network_name      = module.HubVNET.vnet_name
+  remote_virtual_network_id = module.ProductionVNET.vnet_id
+}
+
+module "ProductionVNETtoHubVNETPeering" {
+  source                    = "./modules/virtual_network/peering"
+  name                      = "ProductionVNETtoHubVNETPeering"
+  resource_group_name       = module.VirtualNetworksRG.rg_name
+  virtual_network_name      = module.ProductionVNET.vnet_name
+  remote_virtual_network_id = module.HubVNET.vnet_id
+}
+
 #* Network Manager
 
 module "MainNM" {
