@@ -1,123 +1,141 @@
 #* Resource Groups
 
 module "HubRG" {
-  source      = "./modules/resource_group"
-  rg_name     = "HubRG"
-  rg_location = "Poland Central"
+  source   = "./modules/resource_group"
+  name     = "HubRG"
+  location = "Poland Central"
+  tags = {
+    project = "azure-hub-spoke-network"
+  }
 }
 
 module "VirtualNetworksRG" {
-  source      = "./modules/resource_group"
-  rg_name     = "VirtualNetworksRG"
-  rg_location = "Poland Central"
+  source   = "./modules/resource_group"
+  name     = "VirtualNetworksRG"
+  location = "Poland Central"
+  tags = {
+    project = "azure-hub-spoke-network"
+  }
 }
 
 module "PublicIPsRG" {
-  source      = "./modules/resource_group"
-  rg_name     = "PublicIPsRG"
-  rg_location = "Poland Central"
+  source   = "./modules/resource_group"
+  name     = "PublicIPsRG"
+  location = "Poland Central"
+  tags = {
+    project = "azure-hub-spoke-network"
+  }
 }
 
 module "NetworkInterfacesRG" {
-  source      = "./modules/resource_group"
-  rg_name     = "NetworkInterfacesRG"
-  rg_location = "Poland Central"
+  source   = "./modules/resource_group"
+  name     = "NetworkInterfacesRG"
+  location = "Poland Central"
+  tags = {
+    project = "azure-hub-spoke-network"
+  }
 }
 
 module "VirtualMachinesRG" {
-  source      = "./modules/resource_group"
-  rg_name     = "VirtualMachinesRG"
-  rg_location = "Poland Central"
+  source   = "./modules/resource_group"
+  name     = "VirtualMachinesRG"
+  location = "Poland Central"
+  tags = {
+    project = "azure-hub-spoke-network"
+  }
 }
 
 module "RouteTablesRG" {
-  source      = "./modules/resource_group"
-  rg_name     = "RouteTablesRG"
-  rg_location = "Poland Central"
+  source   = "./modules/resource_group"
+  name     = "RouteTablesRG"
+  location = "Poland Central"
+  tags = {
+    project = "azure-hub-spoke-network"
+  }
 }
 
 #* Virtual Networks
 
 module "HubVNET" {
-  source             = "./modules/virtual_network"
-  vnet_name          = "HubVNET"
-  vnet_location      = module.VirtualNetworksRG.rg_location
-  rg_name            = module.VirtualNetworksRG.rg_name
-  vnet_address_space = ["10.0.0.0/16"]
+  source              = "./modules/virtual_network"
+  name                = "HubVNET"
+  location            = module.VirtualNetworksRG.location
+  resource_group_name = module.VirtualNetworksRG.name
+  address_space       = ["10.0.0.0/16"]
 }
 
 module "DevelopmentVNET" {
-  source             = "./modules/virtual_network"
-  vnet_name          = "DevelopmentVNET"
-  vnet_location      = module.VirtualNetworksRG.rg_location
-  rg_name            = module.VirtualNetworksRG.rg_name
-  vnet_address_space = ["10.10.0.0/16"]
+  source              = "./modules/virtual_network"
+  name                = "DevelopmentVNET"
+  location            = module.VirtualNetworksRG.location
+  resource_group_name = module.VirtualNetworksRG.name
+  address_space       = ["10.10.0.0/16"]
 }
 
 module "RDPConnectionVNET" {
-  source             = "./modules/virtual_network"
-  vnet_name          = "RDPConnectionVNET"
-  vnet_location      = module.VirtualNetworksRG.rg_location
-  rg_name            = module.VirtualNetworksRG.rg_name
-  vnet_address_space = ["10.11.0.0/16"]
+  source              = "./modules/virtual_network"
+  name                = "RDPConnectionVNET"
+  location            = module.VirtualNetworksRG.location
+  resource_group_name = module.VirtualNetworksRG.name
+  address_space       = ["10.11.0.0/16"]
 }
 
 module "NonProductionVNET" {
-  source             = "./modules/virtual_network"
-  vnet_name          = "NonProductionVNET"
-  vnet_location      = module.VirtualNetworksRG.rg_location
-  rg_name            = module.VirtualNetworksRG.rg_name
-  vnet_address_space = ["10.20.0.0/16"]
+  source              = "./modules/virtual_network"
+  name                = "NonProductionVNET"
+  location            = module.VirtualNetworksRG.location
+  resource_group_name = module.VirtualNetworksRG.name
+  address_space       = ["10.20.0.0/16"]
 }
 
 module "ProductionVNET" {
-  source             = "./modules/virtual_network"
-  vnet_name          = "ProductionVNET"
-  vnet_location      = module.VirtualNetworksRG.rg_location
-  rg_name            = module.VirtualNetworksRG.rg_name
-  vnet_address_space = ["10.30.0.0/16"]
+  source              = "./modules/virtual_network"
+  name                = "ProductionVNET"
+  location            = module.VirtualNetworksRG.location
+  resource_group_name = module.VirtualNetworksRG.name
+  address_space       = ["10.30.0.0/16"]
 }
 
 #* Subnets
 
 module "AzureFirewallSubnet" {
-  source                = "./modules/subnet"
-  snet_name             = "AzureFirewallSubnet"
-  rg_name               = module.VirtualNetworksRG.rg_name
-  vnet_name             = module.HubVNET.vnet_name
-  snet_address_prefixes = ["10.0.0.0/24"]
+  source               = "./modules/subnet"
+  name                 = "AzureFirewallSubnet"
+  resource_group_name  = module.VirtualNetworksRG.name
+  virtual_network_name = module.HubVNET.name
+  address_prefixes     = ["10.0.0.0/24"]
 }
 
 module "GeneralSubnet" {
-  source                = "./modules/subnet"
-  snet_name             = "GeneralSubnet"
-  rg_name               = module.VirtualNetworksRG.rg_name
-  vnet_name             = module.DevelopmentVNET.vnet_name
-  snet_address_prefixes = ["10.10.0.0/24"]
+  source               = "./modules/subnet"
+  name                 = "GeneralSubnet"
+  resource_group_name  = module.VirtualNetworksRG.name
+  virtual_network_name = module.DevelopmentVNET.name
+  address_prefixes     = ["10.10.0.0/24"]
 }
 
 module "CheckupSubnet" {
-  source                = "./modules/subnet"
-  snet_name             = "CheckupSubnet"
-  rg_name               = module.VirtualNetworksRG.rg_name
-  vnet_name             = module.RDPConnectionVNET.vnet_name
-  snet_address_prefixes = ["10.11.0.0/24"]
+  source               = "./modules/subnet"
+  name                 = "CheckupSubnet"
+  resource_group_name  = module.VirtualNetworksRG.name
+  virtual_network_name = module.RDPConnectionVNET.name
+  address_prefixes     = ["10.11.0.0/24"]
 }
 
 module "AnalyticsSubnet" {
-  source                = "./modules/subnet"
-  snet_name             = "AnalyticsSubnet"
-  rg_name               = module.VirtualNetworksRG.rg_name
-  vnet_name             = module.NonProductionVNET.vnet_name
-  snet_address_prefixes = ["10.20.0.0/24"]
+  source               = "./modules/subnet"
+  name                 = "AnalyticsSubnet"
+  resource_group_name  = module.VirtualNetworksRG.name
+  virtual_network_name = module.NonProductionVNET.name
+  address_prefixes     = ["10.20.0.0/24"]
 }
 
 module "WorkloadSubnet" {
-  source                = "./modules/subnet"
-  snet_name             = "WorkloadSubnet"
-  rg_name               = module.VirtualNetworksRG.rg_name
-  vnet_name             = module.ProductionVNET.vnet_name
-  snet_address_prefixes = ["10.30.0.0/24"]
+  source               = "./modules/subnet"
+  name                 = "WorkloadSubnet"
+  resource_group_name  = module.VirtualNetworksRG.name
+  virtual_network_name = module.ProductionVNET.name
+  address_prefixes     = ["10.30.0.0/24"]
 }
 
 #* Peerings
@@ -125,65 +143,65 @@ module "WorkloadSubnet" {
 module "DevelopmentVNETtoRDPConnectionVNETPeering" {
   source                    = "./modules/virtual_network/peering"
   name                      = "DevelopmentVNETtoRDPConnectionVNETPeering"
-  resource_group_name       = module.VirtualNetworksRG.rg_name
-  virtual_network_name      = module.DevelopmentVNET.vnet_name
-  remote_virtual_network_id = module.RDPConnectionVNET.vnet_id
+  resource_group_name       = module.VirtualNetworksRG.name
+  virtual_network_name      = module.DevelopmentVNET.name
+  remote_virtual_network_id = module.RDPConnectionVNET.id
 }
 
 module "RDPConnectionVNETtoDevelopmentVNETPeering" {
   source                    = "./modules/virtual_network/peering"
   name                      = "RDPConnectionVNETtoDevelopmentVNETPeering"
-  resource_group_name       = module.VirtualNetworksRG.rg_name
-  virtual_network_name      = module.RDPConnectionVNET.vnet_name
-  remote_virtual_network_id = module.DevelopmentVNET.vnet_id
+  resource_group_name       = module.VirtualNetworksRG.name
+  virtual_network_name      = module.RDPConnectionVNET.name
+  remote_virtual_network_id = module.DevelopmentVNET.id
 }
 
 module "HubVNETtoDevelopmentVNETPeering" {
   source                    = "./modules/virtual_network/peering"
   name                      = "HubVNETtoDevelopmentVNETPeering"
-  resource_group_name       = module.VirtualNetworksRG.rg_name
-  virtual_network_name      = module.HubVNET.vnet_name
-  remote_virtual_network_id = module.DevelopmentVNET.vnet_id
+  resource_group_name       = module.VirtualNetworksRG.name
+  virtual_network_name      = module.HubVNET.name
+  remote_virtual_network_id = module.DevelopmentVNET.id
 }
 
 module "DevelopmentVNETtoHubVNETPeering" {
   source                    = "./modules/virtual_network/peering"
   name                      = "DevelopmentVNETtoHubVNETPeering"
-  resource_group_name       = module.VirtualNetworksRG.rg_name
-  virtual_network_name      = module.DevelopmentVNET.vnet_name
-  remote_virtual_network_id = module.HubVNET.vnet_id
+  resource_group_name       = module.VirtualNetworksRG.name
+  virtual_network_name      = module.DevelopmentVNET.name
+  remote_virtual_network_id = module.HubVNET.id
 }
 
 module "HubVNETtoNonProductionVNETPeering" {
   source                    = "./modules/virtual_network/peering"
   name                      = "HubVNETtoNonProductionVNETPeering"
-  resource_group_name       = module.VirtualNetworksRG.rg_name
-  virtual_network_name      = module.HubVNET.vnet_name
-  remote_virtual_network_id = module.NonProductionVNET.vnet_id
+  resource_group_name       = module.VirtualNetworksRG.name
+  virtual_network_name      = module.HubVNET.name
+  remote_virtual_network_id = module.NonProductionVNET.id
 }
 
 module "NonProductionVNETtoHubVNETPeering" {
   source                    = "./modules/virtual_network/peering"
   name                      = "NonProductionVNETtoHubVNETPeering"
-  resource_group_name       = module.VirtualNetworksRG.rg_name
-  virtual_network_name      = module.NonProductionVNET.vnet_name
-  remote_virtual_network_id = module.HubVNET.vnet_id
+  resource_group_name       = module.VirtualNetworksRG.name
+  virtual_network_name      = module.NonProductionVNET.name
+  remote_virtual_network_id = module.HubVNET.id
 }
 
 module "HubVNETtoProductionVNETPeering" {
   source                    = "./modules/virtual_network/peering"
   name                      = "HubVNETtoProductionVNETPeering"
-  resource_group_name       = module.VirtualNetworksRG.rg_name
-  virtual_network_name      = module.HubVNET.vnet_name
-  remote_virtual_network_id = module.ProductionVNET.vnet_id
+  resource_group_name       = module.VirtualNetworksRG.name
+  virtual_network_name      = module.HubVNET.name
+  remote_virtual_network_id = module.ProductionVNET.id
 }
 
 module "ProductionVNETtoHubVNETPeering" {
   source                    = "./modules/virtual_network/peering"
   name                      = "ProductionVNETtoHubVNETPeering"
-  resource_group_name       = module.VirtualNetworksRG.rg_name
-  virtual_network_name      = module.ProductionVNET.vnet_name
-  remote_virtual_network_id = module.HubVNET.vnet_id
+  resource_group_name       = module.VirtualNetworksRG.name
+  virtual_network_name      = module.ProductionVNET.name
+  remote_virtual_network_id = module.HubVNET.id
 }
 
 #* Route Table
@@ -191,8 +209,8 @@ module "ProductionVNETtoHubVNETPeering" {
 module "DevelopmentRT" {
   source              = "./modules/route_table"
   name                = "DevelopmentRT"
-  location            = module.RouteTablesRG.rg_location
-  resource_group_name = module.RouteTablesRG.rg_name
+  location            = module.RouteTablesRG.location
+  resource_group_name = module.RouteTablesRG.name
 }
 
 #* Route
@@ -200,7 +218,7 @@ module "DevelopmentRT" {
 module "AzureFirewallRoute" {
   source                 = "./modules/route"
   name                   = "AzureFirewallRoute"
-  resource_group_name    = module.RouteTablesRG.rg_name
+  resource_group_name    = module.RouteTablesRG.name
   route_table_name       = module.DevelopmentRT.name
   address_prefix         = "0.0.0.0/0"
   next_hop_type          = "VirtualAppliance"
@@ -211,252 +229,259 @@ module "AzureFirewallRoute" {
 #* Route Table Association
 
 module "DevelopmentRTAssociation" {
-  source         = "./modules/route_table/association"
-  subnet_id      = module.GeneralSubnet.snet_id
+  source         = "./modules/subnet_route_table_association"
+  subnet_id      = module.GeneralSubnet.id
   route_table_id = module.DevelopmentRT.id
 }
 
 #* Network Manager
 
+data "azurerm_subscription" "current" {
+}
+
 module "MainNM" {
-  source            = "./modules/network_manager"
-  nm_name           = "MainNM"
-  nm_location       = module.HubRG.rg_location
-  rg_name           = module.HubRG.rg_name
-  nm_scope_accesses = ["SecurityAdmin"]
+  source              = "./modules/network_manager"
+  name                = "MainNM"
+  location            = module.HubRG.location
+  resource_group_name = module.HubRG.name
+  scope_accesses      = ["SecurityAdmin"]
+  subscription_ids    = [data.azurerm_subscription.current.id]
 }
 
 #* Network Groups
 
 module "HubNETG" {
-  source    = "./modules/network_manager/network_group"
-  netg_name = "HubNETG"
-  nm_id     = module.MainNM.nm_id
+  source             = "./modules/network_manager/network_group"
+  name               = "HubNETG"
+  network_manager_id = module.MainNM.id
 }
 
 module "DevelopmentNETG" {
-  source    = "./modules/network_manager/network_group"
-  netg_name = "DevelopmentNETG"
-  nm_id     = module.MainNM.nm_id
+  source             = "./modules/network_manager/network_group"
+  name               = "DevelopmentNETG"
+  network_manager_id = module.MainNM.id
 }
 
 module "RDPConnectionNETG" {
-  source    = "./modules/network_manager/network_group"
-  netg_name = "RDPConnectionNETG"
-  nm_id     = module.MainNM.nm_id
+  source             = "./modules/network_manager/network_group"
+  name               = "RDPConnectionNETG"
+  network_manager_id = module.MainNM.id
 }
 
 module "NonProductionNETG" {
-  source    = "./modules/network_manager/network_group"
-  netg_name = "NonProductionNETG"
-  nm_id     = module.MainNM.nm_id
+  source             = "./modules/network_manager/network_group"
+  name               = "NonProductionNETG"
+  network_manager_id = module.MainNM.id
 }
 
 module "ProductionNETG" {
-  source    = "./modules/network_manager/network_group"
-  netg_name = "ProductionNETG"
-  nm_id     = module.MainNM.nm_id
+  source             = "./modules/network_manager/network_group"
+  name               = "ProductionNETG"
+  network_manager_id = module.MainNM.id
 }
 
 #* Static Members
 
 module "HubSM" {
-  source                         = "./modules/network_manager/static_member"
-  smem_name                      = "HubSM"
-  netg_id                        = module.HubNETG.netg_id
-  smem_target_virtual_network_id = module.HubVNET.vnet_id
+  source                    = "./modules/network_manager/static_member"
+  name                      = "HubSM"
+  network_group_id          = module.HubNETG.id
+  target_virtual_network_id = module.HubVNET.id
 }
 
 module "DevelopmentSM" {
-  source                         = "./modules/network_manager/static_member"
-  smem_name                      = "DevelopmentSM"
-  netg_id                        = module.DevelopmentNETG.netg_id
-  smem_target_virtual_network_id = module.DevelopmentVNET.vnet_id
+  source                    = "./modules/network_manager/static_member"
+  name                      = "DevelopmentSM"
+  network_group_id          = module.DevelopmentNETG.id
+  target_virtual_network_id = module.DevelopmentVNET.id
 }
 
 module "RDPConnectionSM" {
-  source                         = "./modules/network_manager/static_member"
-  smem_name                      = "RDPConnectionSM"
-  netg_id                        = module.RDPConnectionNETG.netg_id
-  smem_target_virtual_network_id = module.RDPConnectionVNET.vnet_id
+  source                    = "./modules/network_manager/static_member"
+  name                      = "RDPConnectionSM"
+  network_group_id          = module.RDPConnectionNETG.id
+  target_virtual_network_id = module.RDPConnectionVNET.id
 }
 
 module "NonProductionSM" {
-  source                         = "./modules/network_manager/static_member"
-  smem_name                      = "NonProductionSM"
-  netg_id                        = module.NonProductionNETG.netg_id
-  smem_target_virtual_network_id = module.NonProductionVNET.vnet_id
+  source                    = "./modules/network_manager/static_member"
+  name                      = "NonProductionSM"
+  network_group_id          = module.NonProductionNETG.id
+  target_virtual_network_id = module.NonProductionVNET.id
 }
 
 module "ProductionSM" {
-  source                         = "./modules/network_manager/static_member"
-  smem_name                      = "ProductionSM"
-  netg_id                        = module.ProductionNETG.netg_id
-  smem_target_virtual_network_id = module.ProductionVNET.vnet_id
+  source                    = "./modules/network_manager/static_member"
+  name                      = "ProductionSM"
+  network_group_id          = module.ProductionNETG.id
+  target_virtual_network_id = module.ProductionVNET.id
 }
 
 #* Public IPs
 
 module "AzureFirewallPIP" {
-  source       = "./modules/public_ip"
-  pip_name     = "AzureFirewallPIP"
-  rg_name      = module.PublicIPsRG.rg_name
-  pip_location = module.PublicIPsRG.rg_location
+  source              = "./modules/public_ip"
+  name                = "AzureFirewallPIP"
+  resource_group_name = module.PublicIPsRG.name
+  location            = module.PublicIPsRG.location
 }
 
 module "RDPConnectionPIP" {
-  source       = "./modules/public_ip"
-  pip_name     = "RDPConnectionPIP"
-  rg_name      = module.PublicIPsRG.rg_name
-  pip_location = module.PublicIPsRG.rg_location
+  source              = "./modules/public_ip"
+  name                = "RDPConnectionPIP"
+  resource_group_name = module.PublicIPsRG.name
+  location            = module.PublicIPsRG.location
 }
 
 #* Network Interfaces
 
 module "TestingNIC" {
-  source                    = "./modules/network_interface"
-  nic_name                  = "TestingNIC"
-  nic_location              = module.NetworkInterfacesRG.rg_location
-  rg_name                   = module.NetworkInterfacesRG.rg_name
-  nic_ip_configuration_name = "Default"
-  snet_id                   = module.GeneralSubnet.snet_id
+  source                = "./modules/network_interface"
+  name                  = "TestingNIC"
+  location              = module.NetworkInterfacesRG.location
+  resource_group_name   = module.NetworkInterfacesRG.name
+  ip_configuration_name = "Default"
+  subnet_id             = module.GeneralSubnet.id
 }
 
 module "RDPConnectionNIC" {
-  source                    = "./modules/network_interface"
-  nic_name                  = "RDPConnectionNIC"
-  nic_location              = module.NetworkInterfacesRG.rg_location
-  rg_name                   = module.NetworkInterfacesRG.rg_name
-  nic_ip_configuration_name = "Default"
-  snet_id                   = module.CheckupSubnet.snet_id
-  pip_id                    = module.RDPConnectionPIP.pip_id
+  source                = "./modules/network_interface"
+  name                  = "RDPConnectionNIC"
+  location              = module.NetworkInterfacesRG.location
+  resource_group_name   = module.NetworkInterfacesRG.name
+  ip_configuration_name = "Default"
+  subnet_id             = module.CheckupSubnet.id
+  public_ip_address_id  = module.RDPConnectionPIP.id
 }
 
 module "DatabaseNIC" {
-  source                    = "./modules/network_interface"
-  nic_name                  = "DatabaseNIC"
-  nic_location              = module.NetworkInterfacesRG.rg_location
-  rg_name                   = module.NetworkInterfacesRG.rg_name
-  nic_ip_configuration_name = "Default"
-  snet_id                   = module.AnalyticsSubnet.snet_id
+  source                = "./modules/network_interface"
+  name                  = "DatabaseNIC"
+  location              = module.NetworkInterfacesRG.location
+  resource_group_name   = module.NetworkInterfacesRG.name
+  ip_configuration_name = "Default"
+  subnet_id             = module.AnalyticsSubnet.id
 }
 
 module "AppNIC" {
-  source                    = "./modules/network_interface"
-  nic_name                  = "AppNIC"
-  nic_location              = module.NetworkInterfacesRG.rg_location
-  rg_name                   = module.NetworkInterfacesRG.rg_name
-  nic_ip_configuration_name = "Default"
-  snet_id                   = module.WorkloadSubnet.snet_id
+  source                = "./modules/network_interface"
+  name                  = "AppNIC"
+  location              = module.NetworkInterfacesRG.location
+  resource_group_name   = module.NetworkInterfacesRG.name
+  ip_configuration_name = "Default"
+  subnet_id             = module.WorkloadSubnet.id
 }
 
 #* Virtual Machines
 
 module "TestingVM" {
-  source             = "./modules/windows_virtual_machine"
-  wvm_name           = "TestingVM"
-  rg_name            = module.VirtualMachinesRG.rg_name
-  wvm_location       = module.VirtualMachinesRG.rg_location
-  wvm_size           = "Standard_B2s"
-  wvm_admin_username = var.admin_username
-  wvm_admin_password = var.admin_password
-  nic_id             = module.TestingNIC.nic_id
+  source                = "./modules/windows_virtual_machine"
+  name                  = "TestingVM"
+  resource_group_name   = module.VirtualMachinesRG.name
+  location              = module.VirtualMachinesRG.location
+  size                  = "Standard_B2s"
+  admin_username        = var.admin_username
+  admin_password        = var.admin_password
+  network_interface_ids = [module.TestingNIC.id]
 }
 
 module "RDPConnectionVM" {
-  source             = "./modules/windows_virtual_machine"
-  wvm_name           = "RDPConnectionVM"
-  rg_name            = module.VirtualMachinesRG.rg_name
-  wvm_location       = module.VirtualMachinesRG.rg_location
-  wvm_size           = "Standard_B2s"
-  wvm_admin_username = var.admin_username
-  wvm_admin_password = var.admin_password
-  nic_id             = module.RDPConnectionNIC.nic_id
+  source                = "./modules/windows_virtual_machine"
+  name                  = "RDPConnectionVM"
+  resource_group_name   = module.VirtualMachinesRG.name
+  location              = module.VirtualMachinesRG.location
+  size                  = "Standard_B2s"
+  admin_username        = var.admin_username
+  admin_password        = var.admin_password
+  network_interface_ids = [module.RDPConnectionNIC.id]
 }
 
 module "DatabaseVM" {
-  source             = "./modules/windows_virtual_machine"
-  wvm_name           = "DatabaseVM"
-  rg_name            = module.VirtualMachinesRG.rg_name
-  wvm_location       = module.VirtualMachinesRG.rg_location
-  wvm_size           = "Standard_B2s"
-  wvm_admin_username = var.admin_username
-  wvm_admin_password = var.admin_password
-  nic_id             = module.DatabaseNIC.nic_id
+  source                = "./modules/windows_virtual_machine"
+  name                  = "DatabaseVM"
+  resource_group_name   = module.VirtualMachinesRG.name
+  location              = module.VirtualMachinesRG.location
+  size                  = "Standard_B2s"
+  admin_username        = var.admin_username
+  admin_password        = var.admin_password
+  network_interface_ids = [module.DatabaseNIC.id]
 }
 
 module "AppVM" {
-  source             = "./modules/windows_virtual_machine"
-  wvm_name           = "AppVM"
-  rg_name            = module.VirtualMachinesRG.rg_name
-  wvm_location       = module.VirtualMachinesRG.rg_location
-  wvm_size           = "Standard_B2s"
-  wvm_admin_username = var.admin_username
-  wvm_admin_password = var.admin_password
-  nic_id             = module.AppNIC.nic_id
+  source                = "./modules/windows_virtual_machine"
+  name                  = "AppVM"
+  resource_group_name   = module.VirtualMachinesRG.name
+  location              = module.VirtualMachinesRG.location
+  size                  = "Standard_B2s"
+  admin_username        = var.admin_username
+  admin_password        = var.admin_password
+  network_interface_ids = [module.AppNIC.id]
 }
 
 #* Security Admin Configuration
 
 module "BasicSAC" {
-  source   = "./modules/network_manager/security_admin_configuration"
-  sac_name = "BasicSAC"
-  nm_id    = module.MainNM.nm_id
+  source             = "./modules/network_manager/security_admin_configuration"
+  name               = "BasicSAC"
+  network_manager_id = module.MainNM.id
 }
 
 #* [Network Manager] Admin Rule Collections
 
 module "DefaultNMARC" {
-  source   = "./modules/network_manager/admin_rule_collection"
-  arc_name = "DefaultNMARC"
-  sac_id   = module.BasicSAC.sac_id
-  netg_ids = [module.DevelopmentNETG.netg_id, module.NonProductionNETG.netg_id, module.ProductionNETG.netg_id]
+  source                          = "./modules/network_manager/admin_rule_collection"
+  name                            = "DefaultNMARC"
+  security_admin_configuration_id = module.BasicSAC.id
+  network_group_ids               = [module.DevelopmentNETG.id, module.NonProductionNETG.id, module.ProductionNETG.id]
 }
 
 module "RDPConnectionNMARC" {
-  source   = "./modules/network_manager/admin_rule_collection"
-  arc_name = "RDPConnectionNMARC"
-  sac_id   = module.BasicSAC.sac_id
-  netg_ids = [module.DevelopmentNETG.netg_id, module.RDPConnectionNETG.netg_id]
+  source                          = "./modules/network_manager/admin_rule_collection"
+  name                            = "RDPConnectionNMARC"
+  security_admin_configuration_id = module.BasicSAC.id
+  network_group_ids               = [module.DevelopmentNETG.id, module.RDPConnectionNETG.id]
 }
 
 #* Admin Rules
 
 module "DenyInboundAllRule" {
-  source                        = "./modules/network_manager/admin_rule"
-  ar_name                       = "DenyInboundAllRule"
-  arc_id                        = module.DefaultNMARC.arc_id
-  ar_action                     = "Deny"
-  ar_direction                  = "Inbound"
-  ar_priority                   = 900
-  ar_protocol                   = "Any"
-  ar_source_port_ranges         = "0-65535"
-  ar_destination_port_ranges    = "0-65535"
-  ar_source_address_prefix      = "*"
-  ar_destination_address_prefix = "*"
+  source                     = "./modules/network_manager/admin_rule"
+  name                       = "DenyInboundAllRule"
+  admin_rule_collection_id   = module.DefaultNMARC.id
+  action                     = "Deny"
+  direction                  = "Inbound"
+  priority                   = 900
+  protocol                   = "Any"
+  source_port_ranges         = ["0-65535"]
+  destination_port_ranges    = ["0-65535"]
+  source_address_prefix      = "*"
+  destination_address_prefix = "*"
 }
 
 module "AllowInboundRDPRule" {
-  source                        = "./modules/network_manager/admin_rule"
-  ar_name                       = "AllowInboundRDPRule"
-  arc_id                        = module.RDPConnectionNMARC.arc_id
-  ar_action                     = "Allow"
-  ar_direction                  = "Inbound"
-  ar_priority                   = 100
-  ar_protocol                   = "Tcp"
-  ar_source_port_ranges         = "0-65535"
-  ar_destination_port_ranges    = "3389"
-  ar_source_address_prefix      = "*"
-  ar_destination_address_prefix = "*"
+  source                     = "./modules/network_manager/admin_rule"
+  name                       = "AllowInboundRDPRule"
+  admin_rule_collection_id   = module.RDPConnectionNMARC.id
+  action                     = "Allow"
+  direction                  = "Inbound"
+  priority                   = 100
+  protocol                   = "Tcp"
+  source_port_ranges         = ["0-65535"]
+  destination_port_ranges    = ["3389"]
+  source_address_prefix      = "*"
+  destination_address_prefix = "*"
 }
 
 #* Deployment
 
 module "NetworkManagerDP" {
-  source      = "./modules/network_manager/deployment"
-  nm_id       = module.MainNM.nm_id
-  dp_location = module.HubRG.rg_location
-  sac_id      = module.BasicSAC.sac_id
+  source             = "./modules/network_manager/deployment"
+  network_manager_id = module.MainNM.id
+  location           = module.HubRG.location
+  scope_access       = module.BasicSAC.id
+  configuration_ids = [
+    module.BasicSAC.id
+  ]
   depends_on = [
     module.BasicSAC,
     module.DefaultNMARC,
@@ -469,24 +494,28 @@ module "NetworkManagerDP" {
 #* Firewall
 
 module "AzureFirewall" {
-  source      = "./modules/firewall"
-  fw_name     = "AzureFirewall"
-  fw_location = module.VirtualNetworksRG.rg_location
-  rg_name     = module.VirtualNetworksRG.rg_name
-  snet_id     = module.AzureFirewallSubnet.snet_id
-  pip_id      = module.AzureFirewallPIP.pip_id
+  source                = "./modules/firewall"
+  name                  = "AzureFirewall"
+  location              = module.VirtualNetworksRG.location
+  resource_group_name   = module.VirtualNetworksRG.name
+  ip_configuration_name = "Default"
+  subnet_id             = module.AzureFirewallSubnet.id
+  public_ip_address_id  = module.AzureFirewallPIP.id
 }
 
 #* [Firewall] Application Rule Collection
 
 module "AllowGoogleFWARC" {
-  source     = "./modules/firewall/application_rule_collection"
-  arc_name   = "AllowGoogleFWARC"
-  fw_name    = module.AzureFirewall.fw_name
-  rg_name    = module.AzureFirewall.rg_name
-  priority   = 100
-  action     = "Allow"
-  depends_on = [module.AzureFirewall]
+  source              = "./modules/firewall/application_rule_collection"
+  name                = "AllowGoogleFWARC"
+  azure_firewall_name = module.AzureFirewall.name
+  resource_group_name = module.AzureFirewall.resource_group_name
+  priority            = 100
+  action              = "Allow"
+  rule_name           = "AllowGoogleRule"
+  source_addresses    = ["*"]
+  target_fqdns        = ["*.google.com"]
+  depends_on          = [module.AzureFirewall]
 }
 
 #* Policy Definition
@@ -515,9 +544,6 @@ resource "azurerm_policy_definition" "DenyNetworkWatcherPolicy" {
 }
 
 #* Policy Assignment
-
-data "azurerm_subscription" "current" {
-}
 
 resource "azurerm_subscription_policy_assignment" "DenyNetworkWatcherPA" {
   name                 = "DenyNetworkWatcherPA"
