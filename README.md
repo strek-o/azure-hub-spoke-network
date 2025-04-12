@@ -16,6 +16,15 @@ This project sets up a Hub and Spoke Network topology in Azure using Terraform. 
 |   variables.tf
 |
 \---modules
+    +---firewall
+    |   |   main.tf
+    |   |   outputs.tf
+    |   |   variables.tf
+    |   |
+    |   \---application_rule_collection
+    |           main.tf
+    |           variables.tf
+    |
     +---network_interface
     |       main.tf
     |       outputs.tf
@@ -63,15 +72,32 @@ This project sets up a Hub and Spoke Network topology in Azure using Terraform. 
     |       outputs.tf
     |       variables.tf
     |
+    +---route
+    |       main.tf
+    |       variables.tf
+    |
+    +---route_table
+    |       main.tf
+    |       outputs.tf
+    |       variables.tf
+    |
     +---subnet
     |       main.tf
     |       outputs.tf
     |       variables.tf
     |
-    +---virtual_network
+    +---subnet_route_table_association
     |       main.tf
-    |       outputs.tf
     |       variables.tf
+    |
+    +---virtual_network
+    |   |   main.tf
+    |   |   outputs.tf
+    |   |   variables.tf
+    |   |
+    |   \---peering
+    |           main.tf
+    |           variables.tf
     |
     \---windows_virtual_machine
             main.tf
