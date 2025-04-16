@@ -1,14 +1,5 @@
 #* Resource Groups
 
-module "HubRG" {
-  source   = "./modules/resource_group"
-  name     = "HubRG"
-  location = "Poland Central"
-  tags = {
-    project = "azure-hub-spoke-network"
-  }
-}
-
 module "VirtualNetworksRG" {
   source   = "./modules/resource_group"
   name     = "VirtualNetworksRG"
@@ -39,15 +30,6 @@ module "NetworkInterfacesRG" {
 module "VirtualMachinesRG" {
   source   = "./modules/resource_group"
   name     = "VirtualMachinesRG"
-  location = "Poland Central"
-  tags = {
-    project = "azure-hub-spoke-network"
-  }
-}
-
-module "RouteTablesRG" {
-  source   = "./modules/resource_group"
-  name     = "RouteTablesRG"
   location = "Poland Central"
   tags = {
     project = "azure-hub-spoke-network"
@@ -204,21 +186,35 @@ module "ProductionVNETtoHubVNETPeering" {
   remote_virtual_network_id = module.HubVNET.id
 }
 
-#* Route Table
+#* Route Tables
 
 module "DevelopmentRT" {
   source              = "./modules/route_table"
   name                = "DevelopmentRT"
-  location            = module.RouteTablesRG.location
-  resource_group_name = module.RouteTablesRG.name
+  location            = module.VirtualNetworksRG.location
+  resource_group_name = module.VirtualNetworksRG.name
 }
 
-#* Route
+module "NonProductionRT" {
+  source              = "./modules/route_table"
+  name                = "NonProductionRT"
+  location            = module.VirtualNetworksRG.location
+  resource_group_name = module.VirtualNetworksRG.name
+}
 
-module "AzureFirewallRoute" {
+module "ProductionRT" {
+  source              = "./modules/route_table"
+  name                = "ProductionRT"
+  location            = module.VirtualNetworksRG.location
+  resource_group_name = module.VirtualNetworksRG.name
+}
+
+#* Routes
+
+module "AzureFirewallRoute001" {
   source                 = "./modules/route"
-  name                   = "AzureFirewallRoute"
-  resource_group_name    = module.RouteTablesRG.name
+  name                   = "AzureFirewallRoute001"
+  resource_group_name    = module.VirtualNetworksRG.name
   route_table_name       = module.DevelopmentRT.name
   address_prefix         = "0.0.0.0/0"
   next_hop_type          = "VirtualAppliance"
@@ -226,12 +222,46 @@ module "AzureFirewallRoute" {
   depends_on             = [module.AzureFirewall]
 }
 
-#* Route Table Association
+module "AzureFirewallRoute002" {
+  source                 = "./modules/route"
+  name                   = "AzureFirewallRoute002"
+  resource_group_name    = module.VirtualNetworksRG.name
+  route_table_name       = module.NonProductionRT.name
+  address_prefix         = "0.0.0.0/0"
+  next_hop_type          = "VirtualAppliance"
+  next_hop_in_ip_address = module.AzureFirewall.private_ip_address
+  depends_on             = [module.AzureFirewall]
+}
+
+module "AzureFirewallRoute003" {
+  source                 = "./modules/route"
+  name                   = "AzureFirewallRoute003"
+  resource_group_name    = module.VirtualNetworksRG.name
+  route_table_name       = module.ProductionRT.name
+  address_prefix         = "0.0.0.0/0"
+  next_hop_type          = "VirtualAppliance"
+  next_hop_in_ip_address = module.AzureFirewall.private_ip_address
+  depends_on             = [module.AzureFirewall]
+}
+
+#* Route Table Associations
 
 module "DevelopmentRTAssociation" {
   source         = "./modules/subnet_route_table_association"
   subnet_id      = module.GeneralSubnet.id
   route_table_id = module.DevelopmentRT.id
+}
+
+module "NonProductionRTAssociation" {
+  source         = "./modules/subnet_route_table_association"
+  subnet_id      = module.AnalyticsSubnet.id
+  route_table_id = module.NonProductionRT.id
+}
+
+module "ProductionRTAssociation" {
+  source         = "./modules/subnet_route_table_association"
+  subnet_id      = module.WorkloadSubnet.id
+  route_table_id = module.ProductionRT.id
 }
 
 #* Network Manager
@@ -242,8 +272,8 @@ data "azurerm_subscription" "current" {
 module "MainNM" {
   source              = "./modules/network_manager"
   name                = "MainNM"
-  location            = module.HubRG.location
-  resource_group_name = module.HubRG.name
+  location            = module.VirtualNetworksRG.location
+  resource_group_name = module.VirtualNetworksRG.name
   scope_accesses      = ["SecurityAdmin"]
   subscription_ids    = [data.azurerm_subscription.current.id]
 }
@@ -477,7 +507,7 @@ module "AllowInboundRDPRule" {
 module "NetworkManagerDP" {
   source             = "./modules/network_manager/deployment"
   network_manager_id = module.MainNM.id
-  location           = module.HubRG.location
+  location           = module.VirtualNetworksRG.location
   scope_access       = module.BasicSAC.id
   configuration_ids = [
     module.BasicSAC.id
