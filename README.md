@@ -4,6 +4,10 @@
 
 This project sets up a Hub and Spoke Network topology in Azure using Terraform. It follows Infrastructure as Code (IaC) best practices to ensure automated and efficient deployment.
 
+![](https://raw.githubusercontent.com/strek-o/azure-hub-spoke-network/media/images/spokes.png)
+
+![](https://raw.githubusercontent.com/strek-o/azure-hub-spoke-network/media/images/resources.png)
+
 ### File Structure
 
 ```
