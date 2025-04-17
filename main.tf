@@ -18,15 +18,6 @@ module "PublicIPsRG" {
   }
 }
 
-module "NetworkInterfacesRG" {
-  source   = "./modules/resource_group"
-  name     = "NetworkInterfacesRG"
-  location = "Poland Central"
-  tags = {
-    project = "azure-hub-spoke-network"
-  }
-}
-
 module "VirtualMachinesRG" {
   source   = "./modules/resource_group"
   name     = "VirtualMachinesRG"
@@ -368,8 +359,8 @@ module "RDPConnectionPIP" {
 module "TestingNIC" {
   source                = "./modules/network_interface"
   name                  = "TestingNIC"
-  location              = module.NetworkInterfacesRG.location
-  resource_group_name   = module.NetworkInterfacesRG.name
+  location              = module.VirtualMachinesRG.location
+  resource_group_name   = module.VirtualMachinesRG.name
   ip_configuration_name = "Default"
   subnet_id             = module.GeneralSubnet.id
 }
@@ -377,8 +368,8 @@ module "TestingNIC" {
 module "RDPConnectionNIC" {
   source                = "./modules/network_interface"
   name                  = "RDPConnectionNIC"
-  location              = module.NetworkInterfacesRG.location
-  resource_group_name   = module.NetworkInterfacesRG.name
+  location              = module.VirtualMachinesRG.location
+  resource_group_name   = module.VirtualMachinesRG.name
   ip_configuration_name = "Default"
   subnet_id             = module.CheckupSubnet.id
   public_ip_address_id  = module.RDPConnectionPIP.id
@@ -387,8 +378,8 @@ module "RDPConnectionNIC" {
 module "DatabaseNIC" {
   source                = "./modules/network_interface"
   name                  = "DatabaseNIC"
-  location              = module.NetworkInterfacesRG.location
-  resource_group_name   = module.NetworkInterfacesRG.name
+  location              = module.VirtualMachinesRG.location
+  resource_group_name   = module.VirtualMachinesRG.name
   ip_configuration_name = "Default"
   subnet_id             = module.AnalyticsSubnet.id
 }
@@ -396,8 +387,8 @@ module "DatabaseNIC" {
 module "AppNIC" {
   source                = "./modules/network_interface"
   name                  = "AppNIC"
-  location              = module.NetworkInterfacesRG.location
-  resource_group_name   = module.NetworkInterfacesRG.name
+  location              = module.VirtualMachinesRG.location
+  resource_group_name   = module.VirtualMachinesRG.name
   ip_configuration_name = "Default"
   subnet_id             = module.WorkloadSubnet.id
 }
@@ -508,7 +499,7 @@ module "NetworkManagerDP" {
   source             = "./modules/network_manager/deployment"
   network_manager_id = module.MainNM.id
   location           = module.VirtualNetworksRG.location
-  scope_access       = module.BasicSAC.id
+  scope_access       = "SecurityAdmin"
   configuration_ids = [
     module.BasicSAC.id
   ]
