@@ -79,6 +79,8 @@ Used resources documentation:
 
 ### File Structure
 
+This project follows best practices and utilizes reusable modules to ensure scalability and maintainability. The file structure is designed to promote clear organization and modularity, making it easy to manage and extend.
+
 ```powershell
 |   .gitignore
 |   LICENSE
