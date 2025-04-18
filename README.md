@@ -60,19 +60,19 @@ Used resources documentation:
 > [!TIP]
 > Create a file named `terraform.tfvars` and set your environment variables (names must match those in `variables.tf`). Otherwise, you will be prompted to enter them during the deployment process.
 
-3. Initialize Terraform to download the necessary providers and modules.
+3. Initialize **Terraform** to download the necessary providers and modules.
    ```
    terraform init
    ```
-4. Review the Terraform plan to see what resources will be created.
+4. Review the **Terraform** plan to see what resources will be created.
    ```
    terraform plan
    ```
-5. Apply the Terraform configuration to create the resources in Azure.
+5. Apply the **Terraform** configuration to create the resources in Azure.
    ```
    terraform apply
    ```
-6. To destroy the resources created by Terraform, run the following command:
+6. To destroy the resources created by **Terraform**, run the following command:
    ```
    terraform destroy
    ```
