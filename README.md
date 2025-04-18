@@ -2,9 +2,19 @@
 
 ### Overview
 
-This project sets up a Hub and Spoke Network topology in Azure using Terraform. It follows Infrastructure as Code (IaC) best practices to ensure automated and efficient deployment.
+Repository holds a `Terraform` implementation of **Hub and Spoke** network topology in Microsoft Azure.
+It delivers a scalable, modular, and secure network architecture that follows best practices for network segmentation and centralized management.
+
+### Infrastructure
 
 ![](https://raw.githubusercontent.com/strek-o/azure-hub-spoke-network/media/images/spokes.png)
+
+- **RDPConnectionVM** is the only virtual machine with a public IP address.
+- Users have to first establish an RDP connection with **RDPConnectionVM**, and from there, access **TestingVM** through another RDP session within the internal network.
+- This setup allows for straightforward validation that **Azure Firewall** is functioning correctly.
+
+> [!CAUTION]
+> This is intended solely for testing purposes - in a properly secured, production-grade network topology, such direct access should not be allowed.
 
 ![](https://raw.githubusercontent.com/strek-o/azure-hub-spoke-network/media/images/resources.png)
 
