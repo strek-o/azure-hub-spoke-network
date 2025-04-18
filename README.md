@@ -46,6 +46,37 @@ Used resources documentation:
 - [policy definition](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/policy_definition)
 - [policy assignment](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/subscription_policy_assignment)
 
+### Deployment
+
+1. Clone the repository to your local machine.
+   ```
+   git clone https://github.com/strek-o/azure-hub-spoke-network.git
+   ```
+2. Navigate to the cloned directory in your terminal.
+   ```
+   cd azure-hub-spoke-network
+   ```
+
+> [!TIP]
+> Create a file named `terraform.tfvars` and set your environment variables (names must match those in `variables.tf`). Otherwise, you will be prompted to enter them during the deployment process.
+
+3. Initialize Terraform to download the necessary providers and modules.
+   ```
+   terraform init
+   ```
+4. Review the Terraform plan to see what resources will be created.
+   ```
+   terraform plan
+   ```
+5. Apply the Terraform configuration to create the resources in Azure.
+   ```
+   terraform apply
+   ```
+6. To destroy the resources created by Terraform, run the following command:
+   ```
+   terraform destroy
+   ```
+
 ### File Structure
 
 ```powershell
