@@ -16,11 +16,39 @@ It delivers a scalable, modular, and secure network architecture that follows be
 > [!CAUTION]
 > This is intended solely for testing purposes - in a properly secured, production-grade network topology, such direct access should not be allowed.
 
+### Resources
+
 ![](https://raw.githubusercontent.com/strek-o/azure-hub-spoke-network/media/images/resources.png)
+
+The infrastructure defined in this project is composed of various Azure resources focused on networking, security, and computing. The list below outlines all Azure resource types that are provisioned and managed as part of the deployment.
+
+Used resources documentation:
+
+- [resource groups](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/resource_group)
+- [virtual networks](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/virtual_network)
+  - [peerings](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/virtual_network_peering)
+- [subnets](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/subnet)
+- [route tables](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/route_table)
+- [routes](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/route)
+- [route table associations](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/subnet_route_table_association)
+- [network manager](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/network_manager)
+  - [network groups](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/network_manager_network_group)
+  - [static members](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/network_manager_static_member)
+  - [security admin configuration](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/network_manager_security_admin_configuration)
+  - [admin rule collections](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/network_manager_admin_rule_collection)
+  - [admin rules](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/network_manager_admin_rule)
+  - [deployment](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/network_manager_deployment)
+- [public IPs](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/public_ip)
+- [network interfaces](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/network_interface)
+- [virtual machines](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/windows_virtual_machine)
+- [firewall](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/firewall)
+  - [application rule collection](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/firewall_application_rule_collection)
+- [policy definition](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/policy_definition)
+- [policy assignment](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/subscription_policy_assignment)
 
 ### File Structure
 
-```
+```powershell
 |   .gitignore
 |   LICENSE
 |   main.tf
